@@ -2,3 +2,5 @@
 *.key
 .env
 .env.*
+!.env.example
+.qoder/

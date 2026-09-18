@@ -73,7 +73,7 @@ Phase 4/5（公网真实付费 + 反向不结算）完成后的收口文档。
 
 ## 中间产物同步说明
 
-上述三个 commit 涉及的**全部服务文件**已同步至
-`/Users/huangtao/money/kiteai-builder/week1/frankfurter-fx/`（14 个入库文件 +
+上述三个 commit 涉及的**全部服务文件**已同步至本仓库
+`week1/frankfurter-fx/`（14 个入库文件 +
 本地运行配置 `.env`/`.env.mainnet`，与 `591749e` 提交状态一致）；付费工具源码在
 `week1/fxpayer/`（SPEC01 版）与 `week1/fxpayer2/`（宽签名窗口版）。
