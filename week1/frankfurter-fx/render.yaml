@@ -1,0 +1,24 @@
+# Render Blueprint — frankfurter-fx (free tier).
+# Create the service with Root Directory = services/frankfurter-fx so Render
+# finds this file and ./Dockerfile. PORT is auto-injected by Render; do not set it.
+# PAY_TO uses `sync: false` so its value is entered in the Render dashboard and
+# never stored in this committed file.
+services:
+  - type: web
+    name: frankfurter-fx
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    envVars:
+      - key: KITE_NETWORK
+        value: testnet
+      - key: UPSTREAM_URL
+        value: https://api.frankfurter.dev/v1
+      - key: PRICE_USD
+        value: '0.001'
+      - key: SERVICE_DESCRIPTION
+        value: ECB foreign-exchange rates wrapped as an x402 paid service on Kite
+      - key: PAY_TO
+        sync: false

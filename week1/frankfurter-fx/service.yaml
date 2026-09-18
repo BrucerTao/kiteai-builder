@@ -1,0 +1,30 @@
+schema: 1
+name: frankfurter-fx
+display_name: Frankfurter FX Rates
+description: >-
+  European Central Bank reference exchange rates from the free Frankfurter API,
+  wrapped as an x402 paid service and priced per call on the Kite network.
+maintainer:
+  github: BrucerTao
+status: draft
+network: eip155:2368
+pay_to: "0x1a8374b0F0D1074849e0cA31589532C2ad2806d8"
+upstream:
+  name: Frankfurter
+  url: https://api.frankfurter.dev
+  requires_api_key: false
+  terms_url: https://www.frankfurter.app/
+source: go-gin
+endpoints:
+  - method: GET
+    path: /v1/latest
+    summary: Latest ECB reference rates; proxies Frankfurter /v1/latest with optional base and symbols.
+    price_usd: "0.001"
+    example_request:
+      query:
+        base: USD
+    pitfalls:
+      - "an unknown base or symbols code makes Frankfurter return 404, so the call is not settled and not charged"
+      - "base defaults to EUR when omitted; pass base explicitly to avoid surprises"
+categories: [finance, data]
+tags: [fx, rates, ecb, frankfurter, finance]

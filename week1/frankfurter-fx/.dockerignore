@@ -1,0 +1,12 @@
+.git
+.env
+.env.*
+.kite-passport/
+*.key
+/frankfurter-fx
+Dockerfile
+.dockerignore
+render.yaml
+README.md
+service.yaml
+verify_public.sh
