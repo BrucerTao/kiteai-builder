@@ -1,5 +1,5 @@
 # ---- build stage ----
-# Build on the native platform, cross-compile to the deploy target (Fly shared-cpu = amd64).
+# Build on the native platform, cross-compile to the deploy target (Render/Fly shared CPU = linux/amd64).
 FROM --platform=$BUILDPLATFORM golang:1.25 AS build
 ARG TARGETARCH
 WORKDIR /src
