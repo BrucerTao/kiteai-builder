@@ -59,3 +59,41 @@ transaction hash; the pieUSD lands in `PAY_TO`. Verify the hash on
 Deployment must be public **https** (Kite Passport fetches server-side; localhost,
 plain http, self-signed certs and browser-verification tunnels are rejected). Set
 `status: testnet` and `base_url` in `service.yaml` once deployed.
+
+Live deployment: <https://frankfurter-fx.onrender.com> (Render free tier, Docker
+runtime, health check `/healthz`; the free instance sleeps after ~15 min idle —
+warm it with `curl <host>/healthz` before the first paid call).
+
+## Verified end-to-end (Kite testnet, 2026-09-18)
+
+| Check | Result |
+|---|---|
+| `GET /healthz` | 200 |
+| Unpaid `GET /v1/latest?base=USD` | 402 + `PAYMENT-REQUIRED` (network `eip155:2368`, pieUSD, v1, amount `1000000000000000`) |
+| Paid `GET /v1/latest?base=USD` | 200 + Frankfurter body; settle tx [`0x186f8e20…9336f`](https://testnet.kitescan.ai/tx/0x186f8e2090d80f39b0b83883bf3351e0085368fd6a1ad4c08ca2a5f554b9336f), payee == `PAY_TO`, 0.001 pieUSD |
+| Paid `GET /v1/latest?base=NOTACURRENCY` (upstream 404) | 404 `{"message":"not found"}`, **no settlement**, payer balance unchanged |
+
+## Known environment issues (observed on Kite testnet)
+
+- **Testnet head lag breaks the default signing window.** The chain was producing
+  blocks ~36 min apart and its latest-block timestamp trailed wall clock by >10
+  minutes, so EIP-3009 authorizations signed with the SDK default
+  `validAfter = now − 600s` reverted on-chain with `AuthorizationNotYetValid`
+  and the facilitator reported `transaction_failed` (with an empty transaction
+  hash — it never broadcasts). A payer that backdates `validAfter` further
+  (e.g. 2 h) settles fine. This affects any x402 client using SDK defaults,
+  including kpass agents, until the chain catches up.
+- **pieUSD's `transferWithAuthorization` is non-canonical.** It packs the
+  signature as `bytes` instead of `(uint8 v, bytes32 r, bytes32 s)`, so its
+  selector is `0xcf092995`, not EIP-3009's `0x927da105`. The facilitator knows
+  both; a raw `eth_call` simulation must use the pieUSD form.
+- **x402 Go SDK: gin middleware + reverse proxy can mask settlement failure.**
+  `httputil.ReverseProxy` streaming triggers gin's `Flush()` →
+  `WriteHeaderNow()`, which commits status 200 (and the upstream headers) to the
+  client before the middleware settles. If settlement then fails, the intended
+  402 + failure `PAYMENT-RESPONSE` header cannot be delivered — the client sees
+  `200 {}` while nothing was charged. On settlement success the body is intact
+  but the `PAYMENT-RESPONSE` header is lost the same way. Root cause is the
+  SDK's `responseCapture` not isolating `Flush` from the wrapped writer; worth
+  an upstream issue against `coinbase/x402`. Transaction hashes should be
+  verified on-chain rather than trusted from the response header.

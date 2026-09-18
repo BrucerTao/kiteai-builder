@@ -12,12 +12,13 @@
 | `go build ./...` + `go vet ./...` | ✅ PASS | §3 |
 | Dockerfile 构建阶段（linux/amd64 交叉编译） | ✅ 产出 ELF x86-64 静态 | §3 |
 | 本地产物运行：`/healthz` 200 + 未付款 `/v1/latest` 402 解码 | ✅ 4/4 ALL_PASS | §4 |
-| 公网 https 部署（Render 免费版） | ⛔ 阻塞：需用户账号 + 交互式登录 | §5 |
-| kpass 公网真实付费 + 反向不结算（验收 7/8） | ⛔ 阻塞：依赖公网 URL | §5 |
-| `service.yaml` → `status: testnet` + `base_url` | ⛔ 阻塞：需真实 `base_url` + GitHub owner | §5 |
-| 仓库归属（`origin` / `maintainer.github` / git email） | ⛔ 阻塞：需用户本人仓库/账号 | §5 |
-| 看板提交 | ⛔ 阻塞：需公网部署 + 用户账号 | §5 |
-| Track B 主网真实结算（`status: live`） | ⛔ gated：需真 USDC.e + 显式授权 | §5 |
+| 公网 https 部署（Render 免费版） | ✅ **完成**：`https://frankfurter-fx.onrender.com` 部署 success，Phase 3 复测 4/4 ALL_PASS | §5、§11 |
+| 公网真实付费调用（验收 7） | ✅ **完成**：200 + FX body + settle tx `0x186f8e20…9336f`（链上确认收款方==PAY_TO） | §12 |
+| 反向验证：上游失败不结算（验收 8） | ✅ **完成**：404 + 无结算交易 + 余额分毫不差 | §12 |
+| `service.yaml` → `status: testnet` + `base_url` | ✅ 完成（commit `98bbff1` 已推送） | §11 |
+| 仓库归属（`origin` / `maintainer.github` / git email） | ✅ 完成：fork `BrucerTao/kite-x402-services`（SSH 验证） | §10 |
+| 看板提交 | ⏳ 唯一待办：用户网页操作（材料已备齐，见 §12 提交清单） | §12 |
+| Track B 主网真实结算（`status: live`） | ⛔ 用户已决定跳过（不花真钱） | §5 |
 
 **一句话**：本轮能在本地、无需授权完成的都已完成并验证（部署产物 + 构建 + 运行期 402 行为）；
 公网部署及其后的验收/看板步骤**本质上需要用户本人的平台账号、交互式登录、本人 GitHub 仓库、以及真实
@@ -78,7 +79,11 @@ verify_public.sh
 要点：镜像**不含**任何 `.env` / 密钥 / `.kite-passport` / manifest / 部署配置 / 本机构建的二进制；配置全部
 运行时经 env 注入。
 
-### `render.yaml`（Render Blueprint，免费档；本轮选定的部署平台）
+### `render.yaml`（Render 声明式参考配置，免费档；实际部署走手动 Web Service）
+> ⚠️ **注意**：Render Blueprint 只读**仓库根目录**的 `render.yaml`，而本文件随服务放在
+> `services/frankfurter-fx/` → Blueprint 用不了。实际部署走**手动 Web Service**（SPEC02 Phase 2 步骤 7-8）：
+> Root Directory=`services/frankfurter-fx` + Runtime Docker + Free + Health Check `/healthz` + 5 个 env
+> 手动录入（`PAY_TO` 设 Secret）。本文件作为参数的声明式参考（一一对应），保持入库。
 ```yaml
 services:
   - type: web
@@ -321,5 +326,147 @@ services/frankfurter-fx/frankfurter-fx (二进制) -> ignored
 - `kiteai-builder` 本地已加 `.gitignore`（排除 `.DS_Store`/`.env*`/`*.key`）并提交 week1 证据（**未 push**，
   是否公开发布由用户决定）。
 
-剩余唯一用户动作：**网页 fork `gokite-ai/kite-x402-services`** → agent push `7a4304b` → 用户连 Render 部署
-→ agent 跑 `verify_public.sh <HOST>` → Phase 4（需 kpass 重登 + 授权）。
+剩余用户动作（fork 已建、代码已 push，见下）：**连 Render 部署** → agent 跑 `verify_public.sh <HOST>` →
+Phase 4（需 kpass 重登 + 授权）。
+
+**2026-09-18 续**：fork `BrucerTao/kite-x402-services` 已建；remote 已配置（origin=本人 fork SSH、
+upstream=gokite-ai）；`7a4304b` 已 push（`893a275..7a4304b main -> main`，远端 HEAD 核对一致）。CI 在
+fork 默认禁用（Actions total_count=0，不阻塞看板，可后续在 Actions 页一键启用）。⚠️ 发现并修正文档：
+Render Blueprint 只认仓库根目录 `render.yaml` → 改为**手动 Web Service** 路径（SPEC02 Phase 2 已更新），
+`services/frankfurter-fx/render.yaml` 保留为声明式参考。证据仓库 `kiteai-builder` 本地提交 `32eb7a7`
+（未 push，发布与否由用户决定）。
+
+## 11. Phase 2-3-6 完成（2026-09-18：Render 公网部署 + 复测 + manifest 转正）
+
+**Phase 2（部署）**：用户在 Render 面板手动建 Web Service（仓库 `BrucerTao/kite-x402-services` @
+`7a4304b`，Root Directory=`services/frankfurter-fx`，Runtime Docker，Free 档，Health Check `/healthz`，
+5 个 env，`PAY_TO` 为 Secret）→ 构建部署 **success**。公网地址：`https://frankfurter-fx.onrender.com`。
+
+**Phase 3（公网复测，`verify_public.sh` 实测输出）**：
+```
+GET /healthz                      -> HTTP 200
+  {"asset":"pieUSD","network":"eip155:2368","ok":true,"price":"$0.001"}
+GET /v1/latest?base=USD (未付款)  -> HTTP 402 + payment-required 头
+解码断言 4/4 PASS：
+  accepts[0].network == eip155:2368        PASS
+  extra.name == pieUSD                     PASS
+  extra.version == 1                       PASS
+  amount == 1000000000000000               PASS
+  RESULT: ALL_PASS
+```
+附加预检（同日）：POST `/v1/latest` → 402（所有方法均门禁）；`/` → 404（无代理泄漏）；
+`/healthz` → 200（免费）；TLS verify=0（有效证书、无浏览器验证型隧道；raw curl 可达 =
+Passport 服务端可抓取）。响应头 `server: cloudflare`（Render 前置 CDN，正常）。
+
+**Phase 6（manifest 转正）**：`service.yaml` `status: draft → testnet` +
+`base_url: https://frankfurter-fx.onrender.com`；`services/README.md` 行同步 `testnet`。
+`npm run validate` → **exit 0（✓ 2 service manifest(s) valid）**。`example_request` 保持
+`query: {base: USD}` 形式（schema 约定：与 `base_url` 拼接，无需改动）。
+
+**下一步**：Phase 4 真实付费（需 kpass 重登，旧会话已 401；warm-up 后 execute）→ Phase 5 反向不结算
+→ Phase 7 commit+push（`status: testnet` 变更）+ 看板提交。
+
+## 12. Phase 4-5 完成（2026-09-18：公网真实付费 + 反向不结算 + 根因排查）
+
+### 12.1 背景曲折：首次付费调用「假 200」
+
+首次对公网发起付费调用（fxpayer，SDK 默认签名窗口）结果诡异：`STATUS=200` 但 `BODY={}`、
+无 `PAYMENT-RESPONSE` 头、**payer 余额纹丝不动** —— 表面成功、实际未结算。逐层排查：
+
+1. **debug 副本加 ErrorHandler**（`/tmp/fxdebug`，仅临时，正式服务代码零改动）复现并拿到真因：
+   `settlement failed: transaction_failed`；gin 日志出现
+   `Headers were already written. Wanted to override status code 200 with 402`。
+2. **直连 facilitator**（`/tmp/fxdiag`）拿原始响应：
+   `/verify` → `{"isValid":true,"payer":"0xD2B1…d348"}`；`/settle` →
+   `{"success":false,"errorReason":"transaction_failed","transaction":""}`（**连交易哈希都没有** =
+   facilitator 未广播，广播前模拟就 revert）。
+3. **eth_call 链上模拟** revert，错误数据 `0xdf8e4372`。
+4. **破译两把钥匙**（keccak 选择器计算）：
+   - pieUSD 的转账入口是非标准签名布局
+     `transferWithAuthorization(address,address,uint256,uint256,uint256,bytes32,bytes)` = `0xcf092995`
+     （打包 65 字节签名，而非 EIP-3009 标准的 `(v,r,s)` 三参数 `0x927da105`；由 SPEC01 成功结算交易
+     `0xa56ccf24…` 的 input 解码反推）。
+   - `0xdf8e4372` = **`AuthorizationNotYetValid()`**。
+
+### 12.2 根因：Kite 测试网链头滞后 > 10 分钟
+
+- SDK 签名 `validAfter = now − 600s`（10 分钟回拨，防时钟偏差）
+- 实测（同一时刻）：真实时间 `14:59:46 UTC`，链最新块（22041163）时间戳 `14:30:24 UTC`
+  —— **链头落后 ~29 分钟**，且出块间隔 ~36 分钟（停滞性慢出块）
+- 于是链上 `block.timestamp < validAfter` → `AuthorizationNotYetValid()` revert →
+  facilitator 报 `transaction_failed`
+- SPEC01（09-17 17:02）当时链头无此滞后，故成功 —— 差异完全在链基础设施状态，**与服务代码无关**
+
+### 12.3 Workaround：fxpayer2（宽签名窗口）
+
+`/tmp/fxpayer2`（源码已拷贝至 `week1/fxpayer2/`）：完整复刻 x402 客户端付费流程
+（GET 402 → EIP-712 签 EIP-3009 → 带 `PAYMENT-SIGNATURE` 头重放），仅把 `validAfter`
+回拨从 600s 扩到 **2 小时**。facilitator `/verify` 不限制 validAfter 多旧（只验签名与
+validBefore 未过期），故链滞后 30 分钟内也能结算。
+
+### 12.4 Phase 4 证据：公网真实付费调用（验收 7）
+
+```
+$ ./fxpayer2 "https://frankfurter-fx.onrender.com/v1/latest?base=USD"
+PAYER=0xD2B1B5D1C45c6313d08e49186E5B4faF4732d348
+TARGET=https://frankfurter-fx.onrender.com/v1/latest?base=USD
+STATUS=200
+ELAPSED=3.609s
+BODY={"amount":1.0,"base":"USD","date":"2026-09-18","rates":{"AUD":1.4045,"BRL":5.1359,
+"CAD":1.401,"CHF":0.82565,"CNY":6.6976,"CZK":21.238,"DKK":6.523,"EUR":0.8726,"GBP":0.74939,
+"HKD":7.8449,"HUF":317.87,"IDR":17823,"ILS":3.0377,"INR":95.88,"ISK":121.64,"JPY":157.89,
+"KRW":1388.1,"MXN":17.1776,"MYR":4.0805,"NOK":9.4324,"NZD":1.7511,"PHP":62.803,"PLN":3.8076,
+"RON":4.594,"SEK":9.853,"SGD":1.2784,"THB":33.355,"TRY":48.785,"ZAR":16.2724}}
+```
+
+**结算交易（链上 RPC 实证，比浏览器截图更强）**：
+
+```
+tx: 0x186f8e2090d80f39b0b83883bf3351e0085368fd6a1ad4c08ca2a5f554b9336f
+    block 22041165 @ 2026-09-18 15:03:16 UTC | relayer(facilitator): 0x12343e…c78b
+    from(payer)  0xD2B1B5D1C45c6313d08e49186E5B4faF4732d348
+    to(pay_to)   0x1a8374b0F0D1074849e0cA31589532C2ad2806d8   == PAY_TO ✓
+    value        0.001 pieUSD（1000000000000000 / 1e18）
+浏览器复核: https://testnet.kitescan.ai/tx/0x186f8e2090d80f39b0b83883bf3351e0085368fd6a1ad4c08ca2a5f554b9336f
+```
+
+（另两笔历史结算：`0x0dd783a3…` = 本轮本地 debug 服务验证；`0xa56ccf24…` = SPEC01 本地付费调用。
+三笔均为 payer→PAY_TO 各 0.001，facilitator 中继器一致。）
+
+**余额对账**：faucet 100.000 − 3×0.001 = payer **99.997** ✓；PAY_TO **0.003** ✓（RPC eth_call）。
+
+### 12.5 Phase 5 证据：上游失败不结算（验收 8）
+
+```
+$ ./fxpayer2 "https://frankfurter-fx.onrender.com/v1/latest?base=NOTACURRENCY"
+TARGET=.../v1/latest?base=NOTACURRENCY
+STATUS=404
+BODY={"message":"not found"}          ← Frankfurter 上游对未知币种的真实 404 响应
+```
+
+- 买方已签名授权（同一付费流程走到上游），上游返回 404（≥400）→ 中间件 **不调用 settle**
+- 链上复核：`PAY_TO` 转账交易仍为 3 笔（无新增）；payer 仍 **99.997**、PAY_TO 仍 **0.003**
+  —— **分毫不差，未扣费** ✓
+- 结论：`verify → upstream → settle` 顺序正确、仅上游 <400 才结算（验收标准 2 正反两面都实证）
+
+### 12.6 过程中发现的两个上游缺陷（对 bounty 有价值，服务代码未改动）
+
+1. **x402 Go SDK（gin middleware × ReverseProxy）**：反向代理流式转发触发 gin `Flush()` →
+   `WriteHeaderNow()` 把 200 提前刷给客户端；此后 settlement 失败时 402 状态码与
+   `PAYMENT-RESPONSE` 头无法送达（客户端看到 200+`{}`），结算成功时 `PAYMENT-RESPONSE`
+   头同样丢失。本次交易哈希改由链上 RPC 取证。属 `coinbase/x402` SDK 的
+   `responseCapture` 未实现 Flush 隔离所致，值得给上游提 issue。
+2. **Kite 测试网出块停滞/滞后**（~36 min/块，链头时间戳落后墙钟 >10 分钟）触发
+   `AuthorizationNotYetValid`，使 SDK 默认 600s validAfter 回拨的支付全部无法结算。
+   kpass agent 等标准客户端同样会中招（其签名窗口同为 SDK 默认）。等待链恢复或由
+   Kite 侧修复。
+
+### 12.7 看板提交材料清单（用户网页操作）
+
+- 方向：`x402-service`；仓库：`https://github.com/BrucerTao/kite-x402-services`（默认分支 main）
+- Commit SHA：**`591749e`**（Phase 4/5 验证记录收口 commit；前序 `7a4304b` 服务接入、`98bbff1` manifest 转正）
+- 公网地址：`https://frankfurter-fx.onrender.com`（`/healthz` 200；未付款 `/v1/latest` 402）
+- `service.yaml`：`status: testnet`、`npm run validate` exit 0（✓ 2 manifests valid）
+- 示例请求/响应：§12.4（200 + ECB 汇率 JSON）与 §12.5（404 + not found）
+- 交易哈希：`0x186f8e2090d80f39b0b83883bf3351e0085368fd6a1ad4c08ca2a5f554b9336f`
+  （testnet.kitescan.ai 可查，收款方 == PAY_TO）

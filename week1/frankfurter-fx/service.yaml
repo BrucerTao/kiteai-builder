@@ -6,8 +6,9 @@ description: >-
   wrapped as an x402 paid service and priced per call on the Kite network.
 maintainer:
   github: BrucerTao
-status: draft
+status: testnet
 network: eip155:2368
+base_url: https://frankfurter-fx.onrender.com
 pay_to: "0x1a8374b0F0D1074849e0cA31589532C2ad2806d8"
 upstream:
   name: Frankfurter
