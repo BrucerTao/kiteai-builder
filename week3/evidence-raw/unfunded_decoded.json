@@ -1,0 +1,6 @@
+{
+  "x402Version": 2,
+  "error": "insufficient_funds",
+  "accepts[0].network": "eip155:2368",
+  "accepts[0].amount": "1000000000000000"
+}

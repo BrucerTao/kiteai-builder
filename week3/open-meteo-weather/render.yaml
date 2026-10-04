@@ -1,0 +1,27 @@
+# Render Blueprint — open-meteo-weather (free tier, native Node runtime).
+# Create the service with Root Directory = services/open-meteo-weather so Render
+# finds this file and package.json. PORT is auto-injected by Render; do not set it.
+# PAY_TO uses `sync: false` so its value is entered in the Render dashboard and
+# never stored in this committed file.
+services:
+  - type: web
+    name: open-meteo-weather
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: node dist/index.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: KITE_NETWORK
+        value: testnet
+      - key: UPSTREAM_URL
+        value: https://api.open-meteo.com/v1
+      - key: PRICE_USD
+        value: '0.001'
+      - key: SERVICE_DESCRIPTION
+        value: Open-Meteo weather forecast (hourly/daily) for any coordinate
+      - key: PAY_TO
+        sync: false

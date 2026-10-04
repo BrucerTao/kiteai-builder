@@ -1,0 +1,14 @@
+PAYER=0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f
+PAYLOAD={"x402Version":2,"payload":{"authorization":{"from":"0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f","nonce":"0xf7f060a2a3a53fb2d0c5014a97531f67f83005ad6e5b4714fddd3722be70a728","to":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","validAfter":"1791098641","validBefore":"1791109441","value":"1000000000000000"},"signature":"0x6d064dd8543125b02222bfc4cfaf75ebf09d5131733881263b44820bcc20c4304a075a5fd4ef84954336e065573f9e87dc2a25fa1c8092969fa61186fe90fb0c1b"},"accepted":{"scheme":"exact","network":"eip155:2368","asset":"0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A","amount":"1000000000000000","payTo":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","maxTimeoutSeconds":60,"extra":{"name":"pieUSD","version":"1"}},"resource":{"url":"http://localhost:8080/v1/forecast?latitude=52.52\u0026longitude=13.41\u0026current=temperature_2m,wind_speed_10m\u0026hourly=temperature_2m\u0026forecast_days=1","description":"Paid API wrapped for the Kite network","mimeType":"application/json"}}
+TARGET=http://localhost:8080/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m&forecast_days=1
+STATUS=402
+ELAPSED=1.802s
+BODY={}
+HDR Keep-Alive: timeout=5
+HDR Content-Type: application/json; charset=utf-8
+HDR Payment-Required: eyJ4NDAyVmVyc2lvbiI6MiwiZXJyb3IiOiJpbnN1ZmZpY2llbnRfZnVuZHMiLCJyZXNvdXJjZSI6eyJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvdjEvZm9yZWNhc3Q/bGF0aXR1ZGU9NTIuNTImbG9uZ2l0dWRlPTEzLjQxJmN1cnJlbnQ9dGVtcGVyYXR1cmVfMm0sd2luZF9zcGVlZF8xMG0maG91cmx5PXRlbXBlcmF0dXJlXzJtJmZvcmVjYXN0X2RheXM9MSIsImRlc2NyaXB0aW9uIjoiUGFpZCBBUEkgd3JhcHBlZCBmb3IgdGhlIEtpdGUgbmV0d29yayIsIm1pbWVUeXBlIjoiYXBwbGljYXRpb24vanNvbiJ9LCJhY2NlcHRzIjpbeyJzY2hlbWUiOiJleGFjdCIsIm5ldHdvcmsiOiJlaXAxNTU6MjM2OCIsImFtb3VudCI6IjEwMDAwMDAwMDAwMDAwMDAiLCJhc3NldCI6IjB4MzgxMjljZjRDRTVFMTgzZUZGMjQ4RjQyQTdEMzQ1QmIxQjQ3NjIxQSIsInBheVRvIjoiMHgxYTgzNzRiMEYwRDEwNzQ4NDllMGNBMzE1ODk1MzJDMmFkMjgwNmQ4IiwibWF4VGltZW91dFNlY29uZHMiOjYwLCJleHRyYSI6eyJuYW1lIjoicGllVVNEIiwidmVyc2lvbiI6IjEifX1dfQ==
+HDR Cache-Control: no-store
+HDR Content-Length: 2
+HDR Etag: W/"2-vyGp6PvFo4RvsFtPoIWeCReyIC8"
+HDR Date: Sun, 04 Oct 2026 09:24:03 GMT
+HDR Connection: keep-alive

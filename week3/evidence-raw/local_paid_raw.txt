@@ -1,0 +1,20 @@
+PAYER=0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f
+PAYLOAD={"x402Version":2,"payload":{"authorization":{"from":"0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f","nonce":"0x105b6071c93bbf8c84fd24710bcf86731644efd868eee857b9288722dc900940","to":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","validAfter":"1791100129","validBefore":"1791110929","value":"1000000000000000"},"signature":"0x2d719d9c2e25a714b2797c591081935fa971f7efbf2e9642ee3db22236c958900ff4642834909d99a54374e95fb6416cd1c1db0aa625d7fc5c222a381732ccfc1c"},"accepted":{"scheme":"exact","network":"eip155:2368","asset":"0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A","amount":"1000000000000000","payTo":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","maxTimeoutSeconds":60,"extra":{"name":"pieUSD","version":"1"}},"resource":{"url":"http://localhost:8080/v1/forecast?latitude=52.52\u0026longitude=13.41\u0026current=temperature_2m,wind_speed_10m\u0026hourly=temperature_2m\u0026forecast_days=1","description":"Paid API wrapped for the Kite network","mimeType":"application/json"}}
+TARGET=http://localhost:8080/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m&forecast_days=1
+STATUS=200
+ELAPSED=5.02s
+BODY={"latitude":52.52,"longitude":13.419998,"generationtime_ms":0.08654594421386719,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":38.0,"current_units":{"time":"iso8601","interval":"seconds","temperature_2m":"°C","wind_speed_10m":"km/h"},"current":{"time":"2026-10-04T09:45","interval":900,"temperature_2m":15.5,"wind_speed_10m":4.0},"hourly_units":{"time":"iso8601","temperature_2m":"°C"},"hourly":{"time":["2026-10-04T00:00","2026-10-04T01:00","2026-10-04T02:00","2026-10-04T03:00","2026-10-04T04:00","2026-10-04T05:00","2026-10-04T06:00","2026-10-04T07:00","2026-10-04T08:00","2026-10-04T09:00","2026-10-04T10:00","2026-10-04T11:00","2026-10-04T12:00","2026-10-04T13:00","2026-10-04T14:00","2026-10-04T15:00","2026-10-04T16:00","2026-10-04T17:00","2026-10-04T18:00","2026-10-04T19:00","2026-10-04T20:00","2026-10-04T21:00","2026-10-04T22:00","2026-10-04T23:00"],"temperature_2m":[14.3,14.3,13.6,11.7,11.1,10.7,10.4,10.5,11.1,13.3,16.2,18.3,19.4,19.8,19.9,19.7,19.3,18.3,17.1,16.0,15.0,14.0,13.0,12.2]}}
+HDR Etag: W/"40e-O8GNq1I0/JAI+47RzBRO8iYhwWc"
+HDR Payment-Response: eyJzdWNjZXNzIjp0cnVlLCJwYXllciI6IjB4QjYxRDU5NUY5MUIwMzAzQTU4MDRDMmM5OUVGMjAwMkU3ZTBFNWU1ZiIsInRyYW5zYWN0aW9uIjoiMHgxZmRlNmQ4YWNhM2JkOTIxOTk4MmUzODFmYjJlNTM5MTZlYjNhYjcwZjQ1NGU0ZDg1MjMwMzVhOWNlNTA1NmFiIiwibmV0d29yayI6ImVpcDE1NToyMzY4In0=
+HDR Cache-Control: private
+HDR Connection: keep-alive
+HDR Keep-Alive: timeout=5
+HDR Content-Type: application/json; charset=utf-8
+HDR Date: Sun, 04 Oct 2026 09:48:52 GMT
+HDR Content-Length: 1038
+SETTLE_RESPONSE={
+  "success": true,
+  "payer": "0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f",
+  "transaction": "0x1fde6d8aca3bd9219982e381fb2e53916eb3ab70f454e4d8523035a9ce5056ab",
+  "network": "eip155:2368"
+}

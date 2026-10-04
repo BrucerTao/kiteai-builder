@@ -4,3 +4,5 @@
 .env.*
 !.env.example
 .qoder/
+
+.kite-passport/

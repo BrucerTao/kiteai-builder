@@ -1,0 +1,16 @@
+PAYER=0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f
+PAYLOAD={"x402Version":2,"payload":{"authorization":{"from":"0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f","nonce":"0xf689018dce4e85af67d0e7d006fc161c9fe0c1eb3be1ff706b0cdf6eca906608","to":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","validAfter":"1791100315","validBefore":"1791111115","value":"1000000000000000"},"signature":"0xa00b7ad19ca267922b918882b9571b512a9849641e46934ee1af89f1e2ab052e52a6d25c268781b338790bbaeca2bcdc62c7f04cad8010c89dbda61102221e7c1b"},"accepted":{"scheme":"exact","network":"eip155:2368","asset":"0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A","amount":"1000000000000000","payTo":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","maxTimeoutSeconds":60,"extra":{"name":"pieUSD","version":"1"}},"resource":{"url":"http://open-meteo-weather-5d7z.onrender.com/v1/forecast?latitude=999\u0026longitude=13.41\u0026current=temperature_2m","description":"Open-Meteo weather forecast (hourly/daily) for any coordinate","mimeType":"application/json"}}
+TARGET=https://open-meteo-weather-5d7z.onrender.com/v1/forecast?latitude=999&longitude=13.41&current=temperature_2m
+STATUS=400
+ELAPSED=2.437s
+BODY={"reason":"Latitude must be in range of -90 to 90°. Given: 999.0.","error":true}
+HDR Etag: W/"51-keGvtNLYWUb+op5sWgdUz634aNk"
+HDR Rndr-Id: da042c35-00af-4db7
+HDR Vary: Accept-Encoding
+HDR Cf-Cache-Status: DYNAMIC
+HDR Alt-Svc: h3=":443"; ma=86400
+HDR Date: Sun, 04 Oct 2026 09:51:57 GMT
+HDR Server: cloudflare
+HDR X-Render-Origin-Server: Render
+HDR Cf-Ray: a4534a74d9b49879-NRT
+HDR Content-Type: application/json; charset=utf-8

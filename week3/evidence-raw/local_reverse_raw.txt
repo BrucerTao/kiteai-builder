@@ -1,0 +1,12 @@
+PAYER=0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f
+PAYLOAD={"x402Version":2,"payload":{"authorization":{"from":"0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f","nonce":"0x088971a19158ef796c3be76a8493fed0f0a4d05dca7a41b3e5970ef88caa2cb5","to":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","validAfter":"1791100148","validBefore":"1791110948","value":"1000000000000000"},"signature":"0x4513ebb5b8a7395acab9343b344c3cd83bdf6f9bc4ea2155d89b28345ffb018f78bcf0df0174b122055c4593fcef6c58679977a6b65c40cd5578bf13f1771bb91b"},"accepted":{"scheme":"exact","network":"eip155:2368","asset":"0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A","amount":"1000000000000000","payTo":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","maxTimeoutSeconds":60,"extra":{"name":"pieUSD","version":"1"}},"resource":{"url":"http://localhost:8080/v1/forecast?latitude=999\u0026longitude=13.41\u0026current=temperature_2m","description":"Paid API wrapped for the Kite network","mimeType":"application/json"}}
+TARGET=http://localhost:8080/v1/forecast?latitude=999&longitude=13.41&current=temperature_2m
+STATUS=400
+ELAPSED=2.767s
+BODY={"reason":"Latitude must be in range of -90 to 90°. Given: 999.0.","error":true}
+HDR Content-Type: application/json; charset=utf-8
+HDR Date: Sun, 04 Oct 2026 09:49:11 GMT
+HDR Content-Length: 81
+HDR Etag: W/"51-keGvtNLYWUb+op5sWgdUz634aNk"
+HDR Connection: keep-alive
+HDR Keep-Alive: timeout=5

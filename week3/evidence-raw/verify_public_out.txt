@@ -1,0 +1,66 @@
+
+=== Phase 3a: warm + verify /healthz -> 200 (free tier may cold-start ~50s) ===
+GET https://open-meteo-weather-5d7z.onrender.com/healthz -> 200
+{"ok":true,"network":"eip155:2368","asset":"pieUSD","price":"$0.001"}
+
+=== Phase 3b: verify unpaid /v1/forecast -> 402 + decode header ===
+GET https://open-meteo-weather-5d7z.onrender.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m&forecast_days=1 (unpaid) -> 402
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "http://open-meteo-weather-5d7z.onrender.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m&forecast_days=1",
+    "description": "Open-Meteo weather forecast (hourly/daily) for any coordinate",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:2368",
+      "amount": "1000000000000000",
+      "asset": "0x3812...621A",
+      "payTo": "0x1a83...06d8",
+      "maxTimeoutSeconds": 60,
+      "extra": {
+        "name": "pieUSD",
+        "version": "1"
+      }
+    }
+  ]
+}
+PASS - accepts[0].network == eip155:2368
+PASS - extra.name == pieUSD
+PASS - extra.version == 1
+PASS - amount == 1000000000000000
+RESULT: ALL_PASS
+
+=== PUBLIC VERIFICATION PASSED ===
+Host: https://open-meteo-weather-5d7z.onrender.com
+Endpoint: /v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m&forecast_days=1
+Reverse-no-settle trigger: /v1/forecast?latitude=999&longitude=13.41&current=temperature_2m  (Open-Meteo 400)
+
+NOTE (Render free): the instance sleeps after ~15 min idle. Before EACH paid
+call below, re-warm it:  curl -s https://open-meteo-weather-5d7z.onrender.com/healthz   (wait for 200), then execute.
+
+Next MANUAL steps (two payer options; either works):
+  A) Local harness used for the 1004-SPEC evidence (see evidence.md):
+       /tmp/fxpayer3/fxpayer3 "https://open-meteo-weather-5d7z.onrender.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m&forecast_days=1"        -> expect 200 + weather JSON + settle tx
+       /tmp/fxpayer3/fxpayer3 "https://open-meteo-weather-5d7z.onrender.com/v1/forecast?latitude=999&longitude=13.41&current=temperature_2m"    -> expect 400 and NO new settle tx
+  B) Kite Passport agent (kpass 1.10.1, COLON form):
+       kpass health && kpass me                  # preflight; if not logged in:
+       kpass login init --email <YOUR_EMAIL> && kpass login verify --login-id <id> --code <OTP>
+       kpass wallet address                      # payer addr -> fund it (testnet, free):
+       kpass faucet drop --recipient <PAYER_ADDR> --token pieUSD && kpass wallet balance
+       kpass agent:register --type <type>
+       kpass agent:session create --max-amount-per-tx <amt> --ttl <dur> --assets pieUSD
+       kpass agent:session status --request-id <id> --wait        # requires approval
+       kpass agent:session use --session-id <id>
+       curl -s https://open-meteo-weather-5d7z.onrender.com/healthz                     # WARM the free instance first
+       kpass agent:session execute --url "https://open-meteo-weather-5d7z.onrender.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m&forecast_days=1"
+       -> expect 200 + upstream weather body + settle tx hash; verify payee == PAY_TO
+       curl -s https://open-meteo-weather-5d7z.onrender.com/healthz                     # WARM again
+       kpass agent:session execute --url "https://open-meteo-weather-5d7z.onrender.com/v1/forecast?latitude=999&longitude=13.41&current=temperature_2m"     # upstream 400
+       -> expect 400 and NO new settle tx (payer balance unchanged)
+
+Then: service.yaml status draft -> testnet, base_url: "https://open-meteo-weather-5d7z.onrender.com"; npm run validate;
+then git commit (review diff for secrets first) + push to default branch.
