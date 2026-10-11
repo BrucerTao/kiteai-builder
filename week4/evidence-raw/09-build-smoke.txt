@@ -1,0 +1,59 @@
+# BUILD SMOKE: the exact commands Render will run, 2026-10-11T12:25:25Z
+## npm run build  (Build Command: npm ci && npm run build)
+
+> usgs-earthquakes@0.1.0 build
+> tsc -p tsconfig.json
+
+  total 24
+  -rw-r--r--@ 1 <user>  staff  4179 Oct 11 20:25 index.js
+  -rw-r--r--@ 1 <user>  staff  2624 Oct 11 20:25 kite.js
+
+## node dist/index.js  (Start Command), PORT=8092 locally
+kite x402 service on :8092 -> https://earthquake.usgs.gov/fdsnws/event/1 (network eip155:2368, $0.001 per call to 0x1a8374b0F0D1074849e0cA31589532C2ad2806d8)
+
+--- GET /healthz ---
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 69
+ETag: W/"45-q24aZ3mm8KJh4ttpqwLl4toin+Q"
+Date: Sun, 11 Oct 2026 12:25:25 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"ok":true,"network":"eip155:2368","asset":"pieUSD","price":"$0.001"}
+
+--- unpaid GET /v1/query (expect 402) ---
+HTTP 402
+=== decoded PAYMENT-REQUIRED (0x addresses masked) ===
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "http://localhost:8092/v1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude",
+    "description": "USGS earthquake catalog queries behind x402 on Kite",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:2368",
+      "amount": "1000000000000000",
+      "asset": "0x3812...621A",
+      "payTo": "0x1a83...06d8",
+      "maxTimeoutSeconds": 60,
+      "extra": {
+        "name": "pieUSD",
+        "version": "1"
+      }
+    }
+  ]
+}
+=== assertions (Kite testnet) ===
+PASS - accepts[0].network == eip155:2368
+PASS - extra.name == pieUSD
+PASS - extra.version == 1
+PASS - amount == 1000000000000000
+RESULT: ALL_PASS
+
+--- server log ---
+kite x402 service on :8092 -> https://earthquake.usgs.gov/fdsnws/event/1 (network eip155:2368, $0.001 per call to 0x1a8374b0F0D1074849e0cA31589532C2ad2806d8)

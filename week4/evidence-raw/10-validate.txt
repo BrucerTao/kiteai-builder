@@ -1,0 +1,8 @@
+
+> validate
+> node scripts/validate.mjs
+
+note: services/open-meteo-weather/service.yaml shares pay_to with services/frankfurter-fx
+note: services/usgs-earthquakes/service.yaml shares pay_to with services/open-meteo-weather
+✓ 3 service manifest(s) valid
+exit=0

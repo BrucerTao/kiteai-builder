@@ -1,0 +1,38 @@
+schema: 1
+name: usgs-earthquakes
+display_name: USGS Earthquake Catalog
+description: >-
+  Search the USGS earthquake catalog (FDSN event API) by time window, magnitude,
+  region and depth. Public-domain data wrapped as an x402 paid service and priced
+  per call on the Kite network.
+maintainer:
+  github: BrucerTao
+status: testnet
+network: eip155:2368
+base_url: https://usgs-earthquakes.onrender.com
+pay_to: "0x1a8374b0F0D1074849e0cA31589532C2ad2806d8"   # quote it: bare 0x... parses as a YAML integer
+upstream:
+  name: USGS Earthquake Catalog (FDSN event API)
+  url: https://earthquake.usgs.gov/fdsnws/event/1
+  requires_api_key: false
+  terms_url: https://www.usgs.gov/information-policies-and-instructions/acknowledging-or-crediting-usgs
+source: typescript-express
+endpoints:
+  - method: GET
+    path: /v1/query
+    summary: Earthquake catalog search; proxies USGS FDSN event /query.
+    price_usd: "0.001"
+    example_request:
+      query:
+        format: geojson
+        starttime: "2026-10-01"
+        endtime: "2026-10-07"
+        minmagnitude: 5.5
+        limit: 5
+        orderby: magnitude
+    pitfalls:
+      - "never pass jsonerror=true: upstream errors then return HTTP 200 and the call is still charged"
+      - "starttime/endtime must be ISO-8601; bad values return 400 and are not charged"
+      - "limit is capped at 20000 and unknown parameters return 400"
+categories: [data, geo]
+tags: [earthquake, usgs, geology, seismology, geo]

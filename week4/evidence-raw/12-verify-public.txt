@@ -1,0 +1,58 @@
+
+=== Phase 4a: warm + verify /healthz -> 200 (free tier may cold-start ~50s) ===
+GET https://usgs-earthquakes.onrender.com/healthz -> 200
+{"ok":true,"network":"eip155:2368","asset":"pieUSD","price":"$0.001"}
+
+=== Phase 4b: verify unpaid /v1/query -> 402 + decode header ===
+GET https://usgs-earthquakes.onrender.com/v1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude (unpaid) -> 402
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "http://usgs-earthquakes.onrender.com/v1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude",
+    "description": "USGS earthquake catalog queries behind x402 on Kite",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:2368",
+      "amount": "1000000000000000",
+      "asset": "0x3812...621A",
+      "payTo": "0x1a83...06d8",
+      "maxTimeoutSeconds": 60,
+      "extra": {
+        "name": "pieUSD",
+        "version": "1"
+      }
+    }
+  ]
+}
+PASS - accepts[0].network == eip155:2368
+PASS - extra.name == pieUSD
+PASS - extra.version == 1
+PASS - amount == 1000000000000000
+PASS - resource.description is the USGS one
+RESULT: ALL_PASS
+
+=== PUBLIC VERIFICATION PASSED ===
+Host: https://usgs-earthquakes.onrender.com
+Endpoint: /v1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude
+Reverse-no-settle trigger: /v1/query?format=geojson&starttime=not-a-date&limit=5  (USGS 400: Bad starttime value)
+
+NOTE (Render free): the instance sleeps after ~15 min idle. Before EACH paid
+call below, re-warm it:  curl -s https://usgs-earthquakes.onrender.com/healthz   (wait for 200), then execute.
+
+Next MANUAL steps (payer harness used for this round's evidence):
+  /tmp/fxpayer4/fxpayer4 "https://usgs-earthquakes.onrender.com/v1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude"        -> expect 200 + GeoJSON + settle tx
+  /tmp/fxpayer4/fxpayer4 "https://usgs-earthquakes.onrender.com/v1/query?format=geojson&starttime=not-a-date&limit=5"    -> expect 400 and NO new settle tx
+
+NOTE (2026-10-11): the payer must hold pieUSD BEFORE the paid call — an unfunded
+payer is rejected by the facilitator with error "insufficient_funds" (verified
+locally). kpass agent:session execute still cannot pay self-hosted hosts
+(host_not_in_executable_catalog) and both testnet faucets are down, so funds have
+to come from an existing holder. The harness backdates EIP-3009 validAfter
+(BACKDATE_SECONDS, default 2h) because the testnet head lags wall clock.
+
+Then: service.yaml status draft -> testnet, base_url: "https://usgs-earthquakes.onrender.com"; npm run validate;
+then git commit (review diff for secrets first) + push to default branch.

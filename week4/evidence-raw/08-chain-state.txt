@@ -1,0 +1,10 @@
+# Kite testnet chain state, 2026-10-11T12:24:24Z
+head block = 22042197
+head ts    = 1791718602 (2026-10-11T11:36:42Z UTC)
+wall clock = 1791721465 (2026-10-11T12:24:25Z UTC)
+LAG        = 47.7 min  -> BACKDATE_SECONDS = max(7200, lag+1800) = 7200
+
+## pieUSD balances (token 0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A, 18 decimals)
+PAY_TO (receiver, MetaMask)            0x1a8374b0F0D1074849e0cA31589532C2ad2806d8  0.002000 pieUSD (2000000000000000 units)
+payer week-4 (fxpayer4, NEW)           0x010F7992CE7806c291d1F494e44EF1840B7e4584  0.000000 pieUSD (0 units)
+payer week-3 (fxpayer3, KEY LOST)      0xB61D595F91B0303A5804C2c99EF2002E7e0E5e5f  0.001000 pieUSD (1000000000000000 units)

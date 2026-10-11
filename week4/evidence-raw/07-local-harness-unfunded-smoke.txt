@@ -1,0 +1,18 @@
+# NOTE: the EIP-3009 `signature` value below was redacted before archiving. At capture time the
+# payer had 0 pieUSD (facilitator returned insufficient_funds), but the wallet was funded later
+# while this authorization's window (validBefore=1791725095 = 2026-10-11T13:24:55Z) was still
+# open, which would have made it replayable. Everything else is unmodified harness output.
+PAYER=0x010F7992CE7806c291d1F494e44EF1840B7e4584
+PAYLOAD={"x402Version":2,"payload":{"authorization":{"from":"0x010F7992CE7806c291d1F494e44EF1840B7e4584","nonce":"0x0a03db8740ab2e07d7d9035da4651fb1e967b0c7e6ad11e462c60ae149c0f635","to":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","validAfter":"1791714295","validBefore":"1791725095","value":"1000000000000000"},"signature":"0x<REDACTED>"},"accepted":{"scheme":"exact","network":"eip155:2368","asset":"0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A","amount":"1000000000000000","payTo":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","maxTimeoutSeconds":60,"extra":{"name":"pieUSD","version":"1"}},"resource":{"url":"http://localhost:8091/v1/query?format=geojson\u0026starttime=2026-10-01\u0026endtime=2026-10-07\u0026minmagnitude=5.5\u0026limit=5\u0026orderby=magnitude","description":"USGS earthquake catalog queries behind x402 on Kite","mimeType":"application/json"}}
+TARGET=http://localhost:8091/v1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude
+STATUS=402
+ELAPSED=1.354s
+BODY={}
+HDR Date: Sun, 11 Oct 2026 12:24:56 GMT
+HDR Connection: keep-alive
+HDR Keep-Alive: timeout=5
+HDR Content-Type: application/json; charset=utf-8
+HDR Payment-Required: eyJ4NDAyVmVyc2lvbiI6MiwiZXJyb3IiOiJpbnN1ZmZpY2llbnRfZnVuZHMiLCJyZXNvdXJjZSI6eyJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjgwOTEvdjEvcXVlcnk/Zm9ybWF0PWdlb2pzb24mc3RhcnR0aW1lPTIwMjYtMTAtMDEmZW5kdGltZT0yMDI2LTEwLTA3Jm1pbm1hZ25pdHVkZT01LjUmbGltaXQ9NSZvcmRlcmJ5PW1hZ25pdHVkZSIsImRlc2NyaXB0aW9uIjoiVVNHUyBlYXJ0aHF1YWtlIGNhdGFsb2cgcXVlcmllcyBiZWhpbmQgeDQwMiBvbiBLaXRlIiwibWltZVR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIn0sImFjY2VwdHMiOlt7InNjaGVtZSI6ImV4YWN0IiwibmV0d29yayI6ImVpcDE1NToyMzY4IiwiYW1vdW50IjoiMTAwMDAwMDAwMDAwMDAwMCIsImFzc2V0IjoiMHgzODEyOWNmNENFNUUxODNlRkYyNDhGNDJBN0QzNDVCYjFCNDc2MjFBIiwicGF5VG8iOiIweDFhODM3NGIwRjBEMTA3NDg0OWUwY0EzMTU4OTUzMkMyYWQyODA2ZDgiLCJtYXhUaW1lb3V0U2Vjb25kcyI6NjAsImV4dHJhIjp7Im5hbWUiOiJwaWVVU0QiLCJ2ZXJzaW9uIjoiMSJ9fV19
+HDR Cache-Control: no-store
+HDR Content-Length: 2
+HDR Etag: W/"2-vyGp6PvFo4RvsFtPoIWeCReyIC8"

@@ -1,0 +1,13 @@
+=== SETTLE TX 0x9c66a3bddafd5c0160cdd91e56f80603f8ff8360450b7222c2eb9f4f3145b5ea  (13:47:04Z) ===
+Traceback (most recent call last):
+  File "<string>", line 14, in <module>
+ValueError: invalid literal for int() with base 16: '0x'
+  status     : 0x1
+  block      : 22042202
+  from       : 0x12343e649e6b2b2b77649dfab88f103c02f3c78b
+  to         : 0x38129cf4ce5e183eff248f42a7d345bb1b47621a
+  log topic0 : 0x98de503528ee59b5 addr 0x38129cf4ce5e183eff248f42a7d345bb1b47621a
+    from     : 0x010f7992ce7806c291d1f494e44ef1840b7e4584
+    to       : 0x662393d5a96932e19691267265d274c8e1a1886e
+  payer  balance: 0.001
+  PAY_TO balance: 0.001

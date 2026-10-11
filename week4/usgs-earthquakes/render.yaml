@@ -1,0 +1,27 @@
+# Render Blueprint — usgs-earthquakes (free tier, native Node runtime).
+# Create the service with Root Directory = services/usgs-earthquakes so Render
+# finds this file and package.json. PORT is auto-injected by Render; do not set it.
+# PAY_TO uses `sync: false` so its value is entered in the Render dashboard and
+# never stored in this committed file.
+services:
+  - type: web
+    name: usgs-earthquakes
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: node dist/index.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: KITE_NETWORK
+        value: testnet
+      - key: UPSTREAM_URL
+        value: https://earthquake.usgs.gov/fdsnws/event/1
+      - key: PRICE_USD
+        value: '0.001'
+      - key: SERVICE_DESCRIPTION
+        value: USGS earthquake catalog queries behind x402 on Kite
+      - key: PAY_TO
+        sync: false

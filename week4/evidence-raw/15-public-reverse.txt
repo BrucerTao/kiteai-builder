@@ -1,0 +1,44 @@
+PAYER=0x010F7992CE7806c291d1F494e44EF1840B7e4584
+PAYLOAD={"x402Version":2,"payload":{"authorization":{"from":"0x010F7992CE7806c291d1F494e44EF1840B7e4584","nonce":"0x37a1eb222e7134323edd61c6b52b3d329f2db86b664f3a56cb6dda904222994f","to":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","validAfter":"1791719198","validBefore":"1791729998","value":"1000000000000000"},"signature":"0x<REDACTED>"},"accepted":{"scheme":"exact","network":"eip155:2368","asset":"0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A","amount":"1000000000000000","payTo":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","maxTimeoutSeconds":60,"extra":{"name":"pieUSD","version":"1"}},"resource":{"url":"http://usgs-earthquakes.onrender.com/v1/query?format=geojson\u0026starttime=not-a-date\u0026limit=5","description":"USGS earthquake catalog queries behind x402 on Kite","mimeType":"application/json"}}
+TARGET=https://usgs-earthquakes.onrender.com/v1/query?format=geojson&starttime=not-a-date&limit=5
+STATUS=400
+ELAPSED=2.067s
+BODY=Error 400: Bad Request
+
+Bad starttime value "not-a-date". Valid values are ISO-8601 timestamps.
+
+Usage details are available from https://earthquake.usgs.gov/fdsnws/event/1
+
+Request:
+/fdsnws/event/1/query?format=geojson&amp;starttime=not-a-date&amp;limit=5
+
+Request Submitted:
+2026-10-11T13:46:40+00:00
+
+Service version:
+2.8.1
+HDR X-Amz-Cf-Id: so9fuuT2NuNp4zR4K6arRM5ot5nXwhkZbdf8WRE1w_xTWIOpMtjeeQ==
+HDR X-Amz-Cf-Pop: IAD55-P5
+HDR X-Content-Type-Options: nosniff
+HDR Content-Type: text/plain;charset=UTF-8
+HDR Rndr-Id: 39ee5a27-beb2-4ab8
+HDR Vary: Accept-Encoding
+HDR X-Frame-Options: SAMEORIGIN
+HDR X-Render-Origin-Server: nginx
+HDR X-Xss-Protection: 1; mode=block
+HDR Cf-Ray: a48e4fe8bd7ad4aa-NRT
+HDR Cf-Cache-Status: DYNAMIC
+HDR Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+HDR X-Cache: Error from cloudfront
+HDR Access-Control-Allow-Headers: *
+HDR Access-Control-Allow-Methods: GET, OPTIONS
+HDR Cache-Control: public, max-age=60
+HDR Etag: W/"146-KEHDVZDNg8G1XEpZPy/KOpCChZc"
+HDR Expires: Sun, 11 Oct 2026 13:47:40 GMT
+HDR Via: 1.1 afd822e99baebd9321fa9aa8f9350e78.cloudfront.net (CloudFront)
+HDR Alt-Svc: h3=":443"; ma=86400
+HDR Date: Sun, 11 Oct 2026 13:46:40 GMT
+HDR Access-Control-Allow-Origin: *
+HDR Access-Control-Max-Age: 86400
+HDR Last-Modified: Sun, 11 Oct 2026 13:46:40 GMT
+HDR Server: cloudflare

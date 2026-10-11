@@ -1,0 +1,5 @@
+=== PRE-PAID STATE 2026-10-11T13:41:27Z ===
+chain head #1 : block 22042200 head_ts 13:09:04Z lag_min 32.4
+payer  balance: 0.002
+PAY_TO balance: 0.0
+chain head #2 : block 22042200 head_ts 13:09:04Z lag_min 32.8

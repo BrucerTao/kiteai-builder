@@ -1,0 +1,44 @@
+# USGS FDSN event API preflight (direct to upstream, no payment), 2026-10-11T12:24:17Z
+
+## 1. example_request -> expect 200
+GET https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude
+HTTP 200  bytes=3565  t=0.925429s  ctype=application/json; charset=utf-8
+metadata.status=200 api=2.8.1 limit=5 features=4
+  M5.9  2026-10-03T22:55Z  39 km WSW of Tambolaka, Indonesia
+  M5.8  2026-10-02T16:34Z  165 km SSE of Vilyuchinsk, Russia
+  M5.8  2026-10-06T16:48Z  262 km SSW of Severo-Kuril’sk, Russia
+  M5.5  2026-10-06T18:34Z  92 km NNW of Aleneva, Alaska
+
+## 2. reverse triggers -> expect 400 (no settle when wrapped)
+GET /query?format=geojson&starttime=not-a-date&limit=5
+  -> HTTP 400 ctype=text/plain;charset=UTF-8
+     Error 400: Bad Request
+     
+     Bad starttime value "not-a-date". Valid values are ISO-8601 timestamps.
+GET /query?format=banana&starttime=2026-10-01&limit=5
+  -> HTTP 400 ctype=text/plain;charset=UTF-8
+     Error 400: Bad Request
+     
+     Bad format value "banana". Valid values are: "quakeml", "geojson", "csv", "kml", "kmlraw", "xml", "text", "cap".
+GET /query?format=geojson&starttime=2026-10-01&limit=99999
+  -> HTTP 400 ctype=text/plain;charset=UTF-8
+     Error 400: Bad Request
+     
+     Bad limit value "99999". Valid values are 0 <= limit <= 20000
+GET /query?format=geojson&starttime=2026-10-01&limit=5&zzz=1
+  -> HTTP 400 ctype=text/plain;charset=UTF-8
+     Error 400: Bad Request
+     
+     Unknown parameter "zzz".
+
+## 3. jsonerror TRAP -> errors become HTTP 200 (would settle => buyer is charged)
+GET /query?format=geojson&starttime=not-a-date&jsonerror=true
+  -> HTTP 200 ctype=application/json
+     {"type":"FeatureCollection","metadata":{"status":400,"generated":1791721462000,"url":"https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=not-a-date&jsonerror=true","title":"Search Error","api":"2.8.1","count":0,"error":"Bad starttime value \"not-a-date\". Valid values are ISO-8601 timestamps."},"
+GET /query?format=geojson&limit=99999&jsonerror=true
+  -> HTTP 200 ctype=application/json
+     {"type":"FeatureCollection","metadata":{"status":400,"generated":1791721463000,"url":"https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=99999&jsonerror=true","title":"Search Error","api":"2.8.1","count":0,"error":"Bad limit value \"99999\". Valid values are 0 <= limit <= 20000"},"features":[]}
+
+## 4. /count endpoint (not declared in the manifest this round) -> expect 200
+HTTP 200
+{"count":4,"maxAllowed":20000}

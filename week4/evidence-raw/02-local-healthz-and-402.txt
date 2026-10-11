@@ -1,0 +1,40 @@
+# LOCAL run of services/usgs-earthquakes on :8091 (tsx src/index.ts), 2026-10-11T12:24:53Z
+# port 8080 was avoided: a stray week-3 'node dist/index.js' (cwd services/open-meteo-weather,
+# started Oct 4 17:08) was still holding it and answering requests; killed before this run.
+# env: KITE_NETWORK=testnet UPSTREAM_URL=https://earthquake.usgs.gov/fdsnws/event/1 PRICE_USD=0.001 PORT=8091
+# SERVICE_DESCRIPTION=USGS earthquake catalog queries behind x402 on Kite
+
+--- startup stdout (proves which upstream this process proxies) ---
+kite x402 service on :8091 -> https://earthquake.usgs.gov/fdsnws/event/1 (network eip155:2368, $0.001 per call to 0x1a8374b0F0D1074849e0cA31589532C2ad2806d8)
+
+--- GET /healthz (expect 200) ---
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 69
+ETag: W/"45-q24aZ3mm8KJh4ttpqwLl4toin+Q"
+Date: Sun, 11 Oct 2026 12:24:53 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"ok":true,"network":"eip155:2368","asset":"pieUSD","price":"$0.001"}
+
+--- unpaid GET /v1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude (expect 402) ---
+HTTP 402
+HTTP/1.1 402 Payment Required
+Content-Type: application/json; charset=utf-8
+PAYMENT-REQUIRED: eyJ4NDAyVmVyc2lvbiI6MiwiZXJyb3IiOiJQYXltZW50IHJlcXVpcmVkIiwicmVzb3VyY2UiOnsidXJsIjoiaHR0cDovL2xvY2FsaG9zdDo4MDkxL3YxL3F1ZXJ5P2Zvcm1hdD1nZW9qc29uJnN0YXJ0dGltZT0yMDI2LTEwLTAxJmVuZHRpbWU9MjAyNi0xMC0wNyZtaW5tYWduaXR1ZGU9NS41JmxpbWl0PTUmb3JkZXJieT1tYWduaXR1ZGUiLCJkZXNjcmlwdGlvbiI6IlVTR1MgZWFydGhxdWFrZSBjYXRhbG9nIHF1ZXJpZXMgYmVoaW5kIHg0MDIgb24gS2l0ZSIsIm1pbWVUeXBlIjoiYXBwbGljYXRpb24vanNvbiJ9LCJhY2NlcHRzIjpbeyJzY2hlbWUiOiJleGFjdCIsIm5ldHdvcmsiOiJlaXAxNTU6MjM2OCIsImFtb3VudCI6IjEwMDAwMDAwMDAwMDAwMDAiLCJhc3NldCI6IjB4MzgxMjljZjRDRTVFMTgzZUZGMjQ4RjQyQTdEMzQ1QmIxQjQ3NjIxQSIsInBheVRvIjoiMHgxYTgzNzRiMEYwRDEwNzQ4NDllMGNBMzE1ODk1MzJDMmFkMjgwNmQ4IiwibWF4VGltZW91dFNlY29uZHMiOjYwLCJleHRyYSI6eyJuYW1lIjoicGllVVNEIiwidmVyc2lvbiI6IjEifX1dfQ==
+Cache-Control: no-store
+Content-Length: 2
+ETag: W/"2-vyGp6PvFo4RvsFtPoIWeCReyIC8"
+Date: Sun, 11 Oct 2026 12:24:54 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+--- body ---
+{}
+
+--- unpaid GET /v1/query?format=geojson&starttime=not-a-date&limit=5 (reverse trigger, expect 402 before payment) ---
+HTTP 402
+
+--- server log after unpaid requests ---
+kite x402 service on :8091 -> https://earthquake.usgs.gov/fdsnws/event/1 (network eip155:2368, $0.001 per call to 0x1a8374b0F0D1074849e0cA31589532C2ad2806d8)

@@ -1,0 +1,41 @@
+PAYER=0x010F7992CE7806c291d1F494e44EF1840B7e4584
+PAYLOAD={"x402Version":2,"payload":{"authorization":{"from":"0x010F7992CE7806c291d1F494e44EF1840B7e4584","nonce":"0xeebb07120048a9a8cc5dd931662393d5a96932e19691267265d274c8e1a1886e","to":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","validAfter":"1791719165","validBefore":"1791729965","value":"1000000000000000"},"signature":"0x<REDACTED>"},"accepted":{"scheme":"exact","network":"eip155:2368","asset":"0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A","amount":"1000000000000000","payTo":"0x1a8374b0F0D1074849e0cA31589532C2ad2806d8","maxTimeoutSeconds":60,"extra":{"name":"pieUSD","version":"1"}},"resource":{"url":"http://usgs-earthquakes.onrender.com/v1/query?format=geojson\u0026starttime=2026-10-01\u0026endtime=2026-10-07\u0026minmagnitude=5.5\u0026limit=5\u0026orderby=magnitude","description":"USGS earthquake catalog queries behind x402 on Kite","mimeType":"application/json"}}
+TARGET=https://usgs-earthquakes.onrender.com/v1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude
+STATUS=200
+ELAPSED=4.4s
+BODY={"type":"FeatureCollection","metadata":{"generated":1791726368000,"url":"https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2026-10-01&endtime=2026-10-07&minmagnitude=5.5&limit=5&orderby=magnitude","title":"USGS Earthquakes","status":200,"api":"2.8.1","limit":5,"offset":1},"features":[{"type":"Feature","properties":{"mag":5.9,"place":"39 km WSW of Tambolaka, Indonesia","time":1791068155358,"updated":1791224735012,"tz":null,"url":"https://earthquake.usgs.gov/earthquakes/eventpage/us6000tzer","detail":"https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000tzer&format=geojson","felt":5,"cdi":4.5,"mmi":5.128,"alert":"green","status":"reviewed","tsunami":0,"sig":538,"net":"us","code":"6000tzer","ids":",us6000tzer,usauto6000tzer,","sources":",us,usauto,","types":",dyfi,ground-failure,internal-moment-tensor,losspager,moment-tensor,origin,phase-data,shakemap,","nst":82,"dmin":4.6,"rms":1.29,"gap":63,"magType":"mww","type":"earthquake","title":"M 5.9 - 39 km WSW of Tambolaka, Indonesia"},"geometry":{"type":"Point","coordinates":[118.9078,-9.5672,45.951]},"id":"us6000tzer"},
+{"type":"Feature","properties":{"mag":5.8,"place":"165 km SSE of Vilyuchinsk, Russia","time":1790958881010,"updated":1791045609993,"tz":null,"url":"https://earthquake.usgs.gov/earthquakes/eventpage/us6000tz62","detail":"https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000tz62&format=geojson","felt":null,"cdi":null,"mmi":3.738,"alert":"green","status":"reviewed","tsunami":0,"sig":518,"net":"us","code":"6000tz62","ids":",usauto6000tz62,attmagps,us6000tz62,","sources":",usauto,at,us,","types":",internal-moment-tensor,internal-origin,losspager,moment-tensor,origin,phase-data,shakemap,","nst":119,"dmin":1.894,"rms":0.69,"gap":44,"magType":"mww","type":"earthquake","title":"M 5.8 - 165 km SSE of Vilyuchinsk, Russia"},"geometry":{"type":"Point","coordinates":[159.7398,51.6873,29.477]},"id":"us6000tz62"},
+{"type":"Feature","properties":{"mag":5.8,"place":"262 km SSW of Severo-Kuril’sk, Russia","time":1791305302347,"updated":1791392087721,"tz":null,"url":"https://earthquake.usgs.gov/earthquakes/eventpage/us6000u0hy","detail":"https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000u0hy&format=geojson","felt":null,"cdi":null,"mmi":3.696,"alert":"green","status":"reviewed","tsunami":0,"sig":518,"net":"us","code":"6000u0hy","ids":",usauto6000u0hy,us6000u0hy,","sources":",usauto,us,","types":",internal-moment-tensor,losspager,moment-tensor,origin,phase-data,shakemap,","nst":310,"dmin":4.989,"rms":0.66,"gap":24,"magType":"mww","type":"earthquake","title":"M 5.8 - 262 km SSW of Severo-Kuril’sk, Russia"},"geometry":{"type":"Point","coordinates":[154.9316,48.4437,29]},"id":"us6000u0hy"},
+{"type":"Feature","properties":{"mag":5.5,"place":"92 km NNW of Aleneva, Alaska","time":1791311671760,"updated":1791657886740,"tz":null,"url":"https://earthquake.usgs.gov/earthquakes/eventpage/aka2026tuxgky","detail":"https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=aka2026tuxgky&format=geojson","felt":342,"cdi":4.6,"mmi":4.215,"alert":"green","status":"reviewed","tsunami":0,"sig":623,"net":"ak","code":"a2026tuxgky","ids":",aka2026tuxgky,us6000u0ju,","sources":",ak,us,","types":",dyfi,event-sequence,losspager,moment-tensor,oaf,origin,phase-data,shakemap,","nst":121,"dmin":0.1,"rms":0.5,"gap":67,"magType":"ml","type":"earthquake","title":"M 5.5 - 92 km NNW of Aleneva, Alaska"},"geometry":{"type":"Point","coordinates":[-153.609,58.802,87.6]},"id":"aka2026tuxgky"}],"bbox":[-153.609,-9.5672,29,159.7398,58.802,87.6]}
+HDR Access-Control-Allow-Methods: GET, OPTIONS
+HDR Server: cloudflare
+HDR X-Cache: Miss from cloudfront
+HDR X-Render-Origin-Server: nginx
+HDR X-Xss-Protection: 1; mode=block
+HDR Cf-Cache-Status: DYNAMIC
+HDR Alt-Svc: h3=":443"; ma=86400
+HDR Content-Type: application/json; charset=utf-8
+HDR Access-Control-Max-Age: 86400
+HDR Cache-Control: public, max-age=60, private
+HDR Etag: W/"ded-Iqc4a8glQ9XJKabEi+0+OVhi204"
+HDR Payment-Response: eyJzdWNjZXNzIjp0cnVlLCJwYXllciI6IjB4MDEwRjc5OTJDRTc4MDZjMjkxZDFGNDk0ZTQ0RUYxODQwQjdlNDU4NCIsInRyYW5zYWN0aW9uIjoiMHg5YzY2YTNiZGRhZmQ1YzAxNjBjZGQ5MWU1NmY4MDYwM2Y4ZmY4MzYwNDUwYjcyMjJjMmViOWY0ZjMxNDViNWVhIiwibmV0d29yayI6ImVpcDE1NToyMzY4In0=
+HDR Via: 1.1 af714cbe72276e767e61cd6e1fa5ed48.cloudfront.net (CloudFront)
+HDR X-Amz-Cf-Id: EaH31FEBaokLrSFFOA9oL5hrljAh3YpkNPjMBUINyzNNImIOf9TaZw==
+HDR X-Amz-Cf-Pop: IAD55-P5
+HDR Access-Control-Allow-Headers: *
+HDR Access-Control-Allow-Origin: *
+HDR Expires: Sun, 11 Oct 2026 13:47:08 GMT
+HDR Last-Modified: Sun, 11 Oct 2026 13:46:08 GMT
+HDR Rndr-Id: 1b08e847-e69e-40c7
+HDR Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+HDR X-Content-Type-Options: nosniff
+HDR X-Frame-Options: SAMEORIGIN
+HDR Vary: Accept-Encoding,Accept-Encoding
+HDR Cf-Ray: a48e4f1c8cce7635-NRT
+HDR Date: Sun, 11 Oct 2026 13:46:10 GMT
+SETTLE_RESPONSE={
+  "success": true,
+  "payer": "0x010F7992CE7806c291d1F494e44EF1840B7e4584",
+  "transaction": "0x9c66a3bddafd5c0160cdd91e56f80603f8ff8360450b7222c2eb9f4f3145b5ea",
+  "network": "eip155:2368"
+}
